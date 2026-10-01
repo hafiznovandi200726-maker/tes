@@ -1,0 +1,160 @@
+/* Hanya HTML dan CSS, tanpa JavaScript.
+   Layout: sampul besar di tengah layar hitam, bar kontrol di bawah (info lagu | pemutar | pilih lagu). */
+
+:root {
+  --hitam: #000000;
+  --putih: #ffffff;
+  --abu: #a7a7a7;
+  --garis: #2a2a2a;
+  --kotak: #181818;
+  color-scheme: dark;
+}
+
+html, body { height: 100%; }
+
+body {
+  background: var(--hitam);
+  color: var(--putih);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* tombol radio disembunyikan, yang terlihat hanya label di bawah */
+.pilih {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== layar utama ===== */
+.layar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.sampul {
+  display: none;
+  width: min(70vw, 50vh, 380px);
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  font-size: 96px;
+  font-weight: bold;
+  color: var(--putih);
+}
+.sampul-1 { background: linear-gradient(135deg, #1e3cd6, #0a1450); }
+.sampul-2 { background: linear-gradient(135deg, #1aa88a, #0b3d36); }
+.sampul-3 { background: linear-gradient(135deg, #d9682a, #5a2208); }
+
+/* ===== bar bawah ===== */
+.bar {
+  border-top: 1px solid var(--garis);
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr 1fr;
+  align-items: center;
+  gap: 16px 32px;
+}
+
+.info {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.mini {
+  width: 52px;
+  height: 52px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.teks { min-width: 0; }
+.judul {
+  font-weight: bold;
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.artis {
+  color: var(--abu);
+  font-size: 12px;
+  margin: 0;
+}
+
+.pemutar { min-width: 0; }
+.pemutar audio {
+  display: none;
+  width: 100%;
+}
+
+/* daftar lagu di kanan */
+.daftar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.daftar label {
+  color: var(--abu);
+  border: 1px solid var(--garis);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+}
+.daftar label:hover { color: var(--putih); border-color: var(--abu); }
+
+/* ===== lagu yang dipilih ===== */
+#l1:checked ~ .app .p1.sampul { display: flex; }
+#l2:checked ~ .app .p2.sampul { display: flex; }
+#l3:checked ~ .app .p3.sampul { display: flex; }
+
+#l1:checked ~ .app .p1.info { display: flex; }
+#l2:checked ~ .app .p2.info { display: flex; }
+#l3:checked ~ .app .p3.info { display: flex; }
+
+#l1:checked ~ .app audio.p1 { display: block; }
+#l2:checked ~ .app audio.p2 { display: block; }
+#l3:checked ~ .app audio.p3 { display: block; }
+
+#l1:checked ~ .app label[for="l1"],
+#l2:checked ~ .app label[for="l2"],
+#l3:checked ~ .app label[for="l3"] {
+  background: var(--putih);
+  color: var(--hitam);
+  border-color: var(--putih);
+}
+
+#l1:focus-visible ~ .app label[for="l1"],
+#l2:focus-visible ~ .app label[for="l2"],
+#l3:focus-visible ~ .app label[for="l3"] {
+  outline: 2px solid var(--putih);
+  outline-offset: 2px;
+}
+
+.catatan {
+  color: var(--abu);
+  font-size: 12px;
+  text-align: center;
+  margin: 0;
+  padding: 0 16px 16px;
+}
+
+/* ===== layar HP: sampul di atas, kontrol di bawah ===== */
+@media (max-width: 720px) {
+  .bar {
+    grid-template-columns: 1fr;
+  }
+  .daftar { justify-content: flex-start; }
+  .sampul { font-size: 72px; }
+}
